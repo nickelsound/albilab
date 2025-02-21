@@ -2,8 +2,12 @@
 
 This project enables control and operation of the Albilab station over the internet. All sensitive information typically returned by the Albilab API has been removed, and security is implemented via basic authentication.
 
+For full remote control, it is necessary to have a remote camera positioned in front of the Albilab.
+
 
 ![Preview of the web interface](Resources/PC_prntscr.png)
+
+![How to connect the EPS with the Albilab station](Resources/How_To_Connect.png)
 
 
 ## Getting Started

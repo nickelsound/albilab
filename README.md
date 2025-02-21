@@ -38,7 +38,7 @@ For full remote control, it is necessary to have a remote camera positioned in f
 
      ```python
      # Define the remote server address
-     remote_server = 'ADD_REMOTE_SERVER_HERE'
+     remote_server = 'ADD_ESP_SERVER_HERE'
 
      # Define the API URL for Albilab
      ALBILAB_INFO_API_URL = 'http://ADD_ALBILAB_LOCAL_ADDRESS_HERE/info'

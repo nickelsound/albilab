@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<script type="text/javascript" src='./js/jquery.min.js'></script>
+	<script src="./js/remote.js"></script>		
+	<script src="./js/GaugeMeter.js"></script>
+	<link rel="stylesheet" type="text/css" href="./css/main.css" /> 
+	<link rel="stylesheet" type="text/css" href="./css/remote.css" /> 
+	<title>AlbiLAB</title>
+</head>
+
+<html>
+
+<body style="background-color: rgb(48, 48, 48);">
+	<script src="./js/device.js"></script>
+	<script>
+		jQuery(document).ready(function(){ 
+			if(!jQuery.browser.mobile){
+				window.location.replace("/index.html");
+			}
+		}); 
+	</script>
+
+	<div class="div_inline" style="color: #ffffff;">
+		<div class="div_main_time">
+			<h1>Timing</h1>
+			<div class="GaugeMeter" id="time_sun" 
+				data-percent=			"10"
+				data-text_size=			0.18
+				data-text=				"0:00" 
+				data-label=				"Day"
+				data-label_color=		"white"
+				data-size=				"200"
+				data-width=				"20"
+				data-style=				null
+				data-color=				yellow
+				data-animationstep=		"0"
+				data-stripe=			"4"
+			></div>
+
+			<div class="GaugeMeter" id="time_moon" 
+				data-percent=			"10"
+				data-text_size=			0.18
+				data-text=				"0:00"
+				data-label=				"Night"
+				data-label_color=		"white"
+				data-size=				"200"
+				data-width=				"20"
+				data-style=				null
+				data-color=				white
+				data-animationstep=		"0"
+				data-stripe=			"4"
+			></div>
+			<div class="GaugeMeter" id="time_watering" 
+				data-percent=			"10"
+				data-text_size=			0.18
+				data-text=				"0:00"
+				data-label=				"Watering"
+				data-label_color=		"white"
+				data-size=				"200"
+				data-width=				"20"
+				data-style=				null
+				data-color=				#0DA4F0
+				data-animationstep=		"0"
+				data-stripe=			"4"
+			></div>
+		</div>
+
+		<div class="div_main_leds">
+			<h1>LEDs intensity</h1>
+			<div class="GaugeMeter" id="trimmer_red" 
+				data-percent=			"10"
+				data-text_size=			0.22
+				data-append=			"%"
+				data-size=				"200"
+				data-width=				"20"
+				data-style=				"Semi"
+				data-color=				"red"
+				data-animationstep=		"0"
+				data-label=				"Red"
+				data-label_color=		"white" 
+			></div>
+
+			<div class="GaugeMeter" id="trimmer_blue" 
+				data-percent=			"10"
+				data-text_size=			0.22
+				data-append=			"%"
+				data-size=				"200"
+				data-width=				"20"
+				data-style=				"Semi"
+				data-color=				"blue"
+				data-animationstep=		"0"
+				data-label=				"Blue"
+				data-label_color=		"white" 
+			></div>
+
+			<div class="GaugeMeter" id="trimmer_white" 
+				data-percent=			"10"
+				data-text_size=			0.22
+				data-append=			"%"
+				data-size=				"200"
+				data-width=				"20"
+				data-style=				"Semi"
+				data-color=				white
+				data-animationstep=		"0"
+				data-label=				"White"
+				data-label_color=		"white" 
+			></div>
+		</div>
+	</div>
+
+	<br/>
+
+	<div class="div_inline" style="color: #ffffff;">
+		<h1>Information</h1>
+		<div id="div_phase_defined">
+			<h2>Selected phase</h2>
+			<img data-src="./img/flower_germination.png" id="img_germination" class="albiLAB_img icon_flower icon_gray" />
+			<img data-src="./img/flower_leaf_development.png" style="display:none;" id="albiLAB_img img_leaf_development" class="icon_flower icon_gray" />
+			<img data-src="./img/flower_vegetative.png" id="img_vegetative" class="albiLAB_img icon_flower icon_gray" />
+			<img data-src="./img/flower_inflorescence.png" id="img_inflorescence" class="albiLAB_img icon_flower icon_gray" />
+			<img data-src="./img/flower_fruit.png" id="img_fruit" class="albiLAB_img icon_flower icon_gray" />
+			<div id="phase_selected">Germination</div>
+		</div>
+		<div id="div_phase_manual">
+			<h2>Manual settings</h2>
+		</div>
+
+		<div style="text-align: left;">
+			<div class="side_column_item">
+				<div class="side_col_icon">
+					<img data-src="./img/automation.png" id="img_automation" class="albiLAB_img icon_side icon_gray" />
+				</div>
+				<div class="side_col_text">
+					<h3>Watering</h3>
+					<div id="watering_status">Disabled</div>
+					<spanid="div_watering">
+						<div id="watering_time_pump_on">Pump is on for 3s</div>
+						<div id="watering_level">Level < 90%</div>
+						<div id="watering_time_every">Every 8 hours</div>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<br/>
+
+	<div class="div_inline" style="text-align: left;" style="color: #ffffff;">
+		<h1>Sensors</h1>
+		<div class="side_column_item">
+			<div class="side_col_icon">
+				<img data-src="./img/soil_moisture.png" id="img_soil_moisture" class="albiLAB_img icon_side icon_gray" />
+			</div>
+			<div class="side_col_text">
+				<h3>Soil moisture</h3>
+				<div id="value_soil_moisture" style="color: #ffffff;">Not set</div>
+			</div>
+		</div>
+
+		<div class="side_column_item">
+			<div class="side_col_icon">
+				<img data-src="./img/thermometer.png" id="img_thermometer" class="albiLAB_img icon_side icon_gray" />
+			</div>
+			<div class="side_col_text">
+				<h3>Temperature/Humidity</h3>
+				<div id="value_temp_humid" style="color: #ffffff;">Not set</div>
+			</div>
+		</div>
+
+		<div class="side_column_item">
+			<div class="side_col_icon">
+				<img data-src="./img/water-level.png" id="img_water_level" class="albiLAB_img icon_side icon_gray" />
+			</div>
+			<div class="side_col_text">
+				<h3>Water Level Switch</h3>
+				<div id="value_water_level" style="color: #ffffff;">Not set</div>
+			</div>
+		</div>
+		
+
+		<h1 style="padding-top: 30px;">Actuators</h1>
+
+		<div class="side_column_item">
+			<div class="side_col_icon">
+				<img data-src="./img/water_pump.png" id="img_water_pump" class="albiLAB_img icon_side icon_gray" />
+			</div>
+			<div class="side_col_text">
+				<h3>Water Pump</h3>
+				<div id="value_water_pump" style="color: #ffffff;">Not set</div>
+			</div>
+		</div>
+
+		<div class="side_column_item">
+			<div class="side_col_icon">
+				<img data-src="./img/fan.png" id="img_fan" class="albiLAB_img icon_side icon_gray" />
+			</div>
+			<div class="side_col_text">
+				<h3>Fan</h3>
+				<div id="value_fan" style="color: #ffffff;">Not set</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="div_inline div_main_25p" style="text-align: center;">
+		<h1>Control</h1>
+		<div class="cross-container">
+			<div class="cross-row">
+				<div class="cross-item"></div>
+				<div class="cross-item">
+					<img data-src="./img/arrowhead-up.png" id="img_up" class="albiLAB_img icon_side"  />
+				</div>
+				<div class="cross-item"></div>
+			</div>
+			<div class="cross-row">
+				<div class="cross-item">
+					<img data-src="./img/arrowhead-left.png" id="img_left" class="albiLAB_img icon_side"  />
+				</div>
+				<div class="cross-item">
+					<img data-src="./img/checked.png" id="img_ok" class="albiLAB_img icon_side"  />
+				</div>
+				<div class="cross-item">
+					<img data-src="./img/arrowhead-right.png" id="img_right" class="albiLAB_img icon_side" />
+				</div>
+			</div>
+			<div class="cross-row">
+				<div class="cross-item"></div>
+				<div class="cross-item">
+					<img data-src="./img/arrowhead-down.png" id="img_down" class="albiLAB_img icon_side"  />
+				</div>
+				<div class="cross-item"></div>
+			</div>
+		</div>
+	</div>		
+</body>
+
+</html>

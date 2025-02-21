@@ -1,0 +1,33 @@
+{
+    "version": 1,
+    "germination": {
+        "red": 60,
+        "blue": 30,
+        "white": 20,
+        "time": 480
+    },
+    "leafDevelopment": {
+        "red": 30,
+        "blue": 30,
+        "white": 80,
+        "time": 540
+    },
+    "vegetative": {
+        "red": 30,
+        "blue": 30,
+        "white": 80,
+        "time": 540
+    },
+    "inflorescence": {
+        "red": 40,
+        "blue": 40,
+        "white": 80,
+        "time": 840
+    },
+    "fruit": {
+        "red": 0,
+        "blue": 0,
+        "white": 100,
+        "time": 840
+    }
+}

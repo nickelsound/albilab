@@ -1,0 +1,24 @@
+#img_ok, #img_right, #img_left, #img_up, #img_down {
+    cursor: pointer;
+}
+.cross-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 150px;
+}
+
+.cross-row {
+    display: flex;
+    justify-content: center;
+    margin: 5px 0; /* Přidání mezery mezi řádky */
+}
+
+.cross-item {
+    width: 100px; /* Nastavte podle potřeby */
+    height: 100px; /* Nastavte podle potřeby */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 5px; /* Přidání mezery mezi položkami */
+}

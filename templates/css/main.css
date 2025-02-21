@@ -1,0 +1,254 @@
+#bar,
+.barLEDs {
+    height: 30px;
+    line-height: 30px;
+}
+body,
+html {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    font-family: Arial;
+}
+.desktop_form a,
+h1,
+h2,
+h3 {
+    color: #fff;
+    margin-bottom: 0;
+}
+.div_files h1 {
+    color: #000;
+}
+.horizontalTab {
+    background-color: #555;
+    color: #fff;
+    float: left;
+    border: none;
+    outline: 0;
+    cursor: pointer;
+    padding: 14px 16px;
+    font-size: 17px;
+    width: 33.333%;
+}
+.div_files,
+.tabcontent {
+    text-align: center;
+    padding: 20px;
+}
+.horizontalTab:hover {
+    background-color: #777;
+}
+.tabcontent {
+    color: #fff;
+    display: none;
+}
+.tabActive {
+    background-color: #303030;
+    display: flex;
+}
+#progressBar,
+.progressBarLEDs {
+    width: 50%;
+    background-color: gray;
+}
+#bar {
+    width: 10%;
+    background-color: #add8e6;
+    text-align: center;
+    color: #00f;
+}
+.progressBarLEDs {
+    display: inline-block;
+    vertical-align: middle;
+}
+.barLEDs {
+    display: block;
+    width: 10%;
+    text-align: center;
+    color: #000;
+}
+.bar_inline,
+.div_inline {
+    display: inline-block;
+}
+.bar_text {
+    width: 100px;
+    text-align: center;
+    vertical-align: middle;
+}
+.progressBar {
+    margin: 10px auto;
+}
+.div_files {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    border-radius: 10px;
+    border: 1px solid #000;
+}
+.div_inline {
+    padding: 10px 5px;
+}
+.allowOverwriteFile {
+    margin: 15px;
+}
+.div_main_50p {
+    width: 50%;
+}
+.div_main_25p {
+    width: 25%;
+}
+.side_col_icon {
+    flex: 0 0 15%;
+}
+.side_col_text {
+    flex: 1 0 80%;
+    margin: auto 10px;
+}
+.side_col_text h3 {
+    margin: 0;
+}
+.side_column_item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 10px auto;
+}
+.icon_gray {
+    filter: invert(0.6);
+}
+.icon_green {
+    filter: brightness(0.7) invert(0.7) sepia(0.6) hue-rotate(80deg) saturate(10000%) contrast(0.6);
+}
+.icon_red {
+    filter: brightness(1) invert(0.21) sepia(1) hue-rotate(0deg) saturate(10000%) contrast(0.6);
+}
+.icon_blue {
+    filter: brightness(1) invert(0.21) sepia(1) hue-rotate(180deg) saturate(15000%) contrast(0.9);
+}
+.icon_side {
+    padding-top: 10px;
+    width: 100%;
+}
+.icon_flower {
+    padding-top: 10px;
+    width: 15%;
+}
+.table_files {
+    align-content: center;
+    margin: 30px;
+    text-align: left;
+    display: inline-block;
+}
+.form_files,
+.header {
+    margin-top: 10px;
+}
+.table_files td:nth-child(3) {
+    padding-right: 20px;
+}
+.table_files td:nth-child(4) {
+    text-align: right;
+}
+.input_wifi {
+    display: inline;
+    align-content: right;
+    width: 75%;
+    padding-right: 20%;
+}
+.desktop_form,
+.mobile_form {
+    text-align: center;
+    padding: 15px 0;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+.mobile_form {
+    width: 95%;
+    border-radius: 10px;
+    border: 1px solid #fff;
+}
+.mobile_form input {
+    display: inline-block;
+    text-align: left;
+}
+.desktop_form label,
+.mobile_form label {
+    width: 20%;
+    display: inline-block;
+    text-align: right;
+}
+.desktop_form {
+    width: 50%;
+    border-radius: 10px;
+    border: 1px solid #fff;
+}
+.desktop_form input {
+    width: 40%;
+    display: inline-block;
+    text-align: left;
+}
+.header {
+    display: block;
+}
+.wifi_block {
+    margin-bottom: 20px;
+}
+.about_header {
+    margin-bottom: 15px;
+}
+.about_photo {
+    width: 120px;
+    display: inline;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.about_photo_img {
+    width: 100px;
+}
+.about_text {
+    display: inline-block;
+    vertical-align: top;
+}
+.about_row {
+    display: flex;
+}
+.GaugeMeter {
+    position: Relative;
+    text-align: Center;
+    overflow: Hidden;
+    cursor: Default;
+    display: inline-block;
+}
+.GaugeMeter B,
+.GaugeMeter SPAN {
+    margin: 0 23%;
+    width: 54%;
+    position: Absolute;
+    text-align: Center;
+    display: Inline-Block;
+    color: #fff;
+    font-weight: 100;
+    font-family: "Open Sans", Arial;
+    overflow: Hidden;
+    white-space: NoWrap;
+    text-overflow: Ellipsis;
+}
+.GaugeMeter[data-style="Semi"] B {
+    margin: 0 10%;
+    width: 80%;
+}
+.GaugeMeter S,
+.GaugeMeter U {
+    text-decoration: None;
+    font-size: 0.5em;
+    opacity: 0.5;
+}
+.GaugeMeter B {
+    color: #fff;
+    font-weight: 300;
+    font-size: 1em;
+    opacity: 0.8;
+}

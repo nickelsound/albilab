@@ -1,0 +1,59 @@
+{
+    "version": 1,
+    "interface": {
+        "language": "en-GB",
+        "theme": "dark"
+    },
+    "display": {
+        "backlight": 3,
+        "resolution": [240, 240]
+    },
+    "plantPhase": 0,
+    "sensors": {
+        "soilMoisture": {
+            "interface": "gpio",
+            "pin": 255,
+            "type": "none",
+            "wet": 1400,
+            "dry": 4050
+        },
+        "thermoHumid": {
+            "interface": "gpio",
+            "pin": 255,
+            "type": "none"
+        },
+        "waterSwitch": {
+            "interface": "gpio",
+            "pin": 255,
+            "type": "none",
+            "lowLevelLogic": 0
+        }
+    },
+    "actuators": {
+        "fan": {
+            "interface": "gpio",
+            "pin": 255,
+            "type": "none"
+        },
+        "waterPump": {
+            "interface": "gpio",
+            "pin": 255,
+            "type": "none"
+        }
+    },
+    "watering": {
+        "enabled": 0,
+        "pumpOnTime": 3,
+        "moistureLevel": 70,
+        "moistureEnable": 0,
+        "period": 8  
+    },
+    "WiFi": {
+        "mode": 1,
+        "password": "password",
+        "ssid": "ssid",
+        "passwordAP": "AlbiLAB_AP",
+        "ssidAP": "AlbiLAB",
+        "dnsName": "AlbiLAB"
+    }
+}

@@ -56,6 +56,7 @@ The touch board calls the very same Albilab URLs as the web interface, but you p
 
 3. **Print the enclosure**  
    A 3-D printable model for the five-button keypad will be published here: <https://www.printables.com/model/1268868-albilab-remote-controller>.
+   
    Wiring is trivial: just power the ESP32 (5 V → VIN, GND → GND). The capacitive electrodes are part of the printed front plate; no extra components are required.
 
 ---

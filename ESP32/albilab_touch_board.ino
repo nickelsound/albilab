@@ -7,6 +7,7 @@ For full remote control, it is necessary to have a remote camera positioned in f
 
 ![Preview of the web interface](Resources/PC_prntscr.png)  
 ![How to connect the EPS with the Albilab station](Resources/How_To_Connect.png)
+![3D printed touch board with ESP32](Resources/3dprinter_touch_board.jif)
 
 ---
 
@@ -42,8 +43,14 @@ The touch board calls the very same Albilab URLs as the web interface, but you p
    ```cpp
    const char* ssid     = "YOUR_WIFI_SSID";
    const char* password = "YOUR_WIFI_PASSWORD";
+
+   // ========= MUST be set before first flash =========
+   const char* ALBILAB_BASE_URL  = "";     // <- same URL as ESP8266 / Flask
+   const char* AUTH_HEADER_NAME  = "Authorization";                    // usually leave as is
+   const char* AUTH_HEADER_VALUE = "Basic "; // the base64 user:password header value
+   // ==================================================
    ```
-   All other constants (server URL, auth header, thresholds…) are already shared with the ESP8266 variant, so no further changes should be needed.
+   All other constants (touch pins, thresholds…) come with sane defaults.
 
 2. **Upload the code** to any ESP32 that supports capacitive pins (the default pin list is `{4, 14, 27, 33, 32}` → `T0–T4`).
 

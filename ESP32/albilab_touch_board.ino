@@ -1,103 +1,117 @@
-# Albilab Remote Control
+#include <WiFi.h>
+#include <WiFiClientSecure.h>
+#include <HTTPClient.h>
 
-This project enables control and operation of the Albilab station over the internet.  
-All sensitive information typically returned by the Albilab API has been removed, and security is implemented via basic authentication.
+// -------------------- Wi-Fi ---------------------------------------------------
+const char* ssid     = "";   // fill in your Wi-Fi
+const char* password = "";
 
-For full remote control, it is necessary to have a remote camera positioned in front of the Albilab.
+// -------------------- Albilab server & HTTP header ---------------------------
+const char* ALBILAB_BASE_URL  = "";
+const char* AUTH_HEADER_NAME  = "Authorization";
+const char* AUTH_HEADER_VALUE = "Basic ";
 
-![Preview of the web interface](Resources/PC_prntscr.png)  
-![How to connect the EPS with the Albilab station](Resources/How_To_Connect.png)
-![3D printed touch board with ESP32](Resources/3dprinter_touch_board.jif)
+// -------------------- Touch sensors ------------------------------------------
+const byte NUM_TOUCH = 5;
+const byte touchPins[NUM_TOUCH] = {4, 14, 27, 33, 32};          // T0–T4
+const char* btnId[NUM_TOUCH]    = {"down", "right", "run-stop", "left", "up"};
 
----
+const int   THRESHOLD       = 50;   // lower => more sensitive
+const unsigned long MIN_TIME = 200; // ms, debounce
+const unsigned long DEBUG_MS = 100; // print raw values every n ms
 
-## Getting Started
+// -------------------- State variables ----------------------------------------
+bool          pressed [NUM_TOUCH] = {false};
+bool          counting[NUM_TOUCH] = {false};
+unsigned long pressStart[NUM_TOUCH];
+unsigned long lastDebug = 0;
 
-### Prerequisites
-- **ESP8266** – for the classic “relay-style” remote control  
-- **ESP32 touch board (optional)** – 3-D-printed keypad with five capacitive buttons for direct hardware control (STL link will be added soon)  
-- **Wi-Fi Network** – both micro-controllers must be able to join your Wi-Fi  
-- **Docker** – to run the Flask web application
+// -----------------------------------------------------------------------------
+// HTTPS GET with custom header
+void callButtonUrl(const char* id) {
+  static WiFiClientSecure client;
+  client.setInsecure();                    // ignore TLS cert (self-signed)
+  HTTPClient https;
 
----
+  String url = String(ALBILAB_BASE_URL) + id;
+  Serial.print("Calling: "); Serial.println(url);
 
-## ESP8266 Setup (web-trigger variant)
+  if (https.begin(client, url)) {
+    https.addHeader(AUTH_HEADER_NAME, AUTH_HEADER_VALUE);
+    int code = https.GET();
+    Serial.print("HTTP code: "); Serial.println(code);
+    https.end();
+  } else {
+    Serial.println("HTTPS.begin() failed");
+  }
+}
 
-1. **Edit `ESP8266/albilab_remote_esp.ino`**
+// -----------------------------------------------------------------------------
+// Wi-Fi connect / reconnect
+void wifiConnect() {
+  Serial.print("Connecting to \""); Serial.print(ssid); Serial.println("\"...");
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
 
-   ```cpp
-   const char* ssid     = "YOUR_WIFI_SSID";
-   const char* password = "YOUR_WIFI_PASSWORD";
-   ```
+  unsigned long t0 = millis();
+  while (WiFi.status() != WL_CONNECTED && millis() - t0 < 15000) {
+    delay(250);
+    Serial.print('.');
+  }
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.println("\nWi-Fi OK, IP: " + WiFi.localIP().toString());
+  } else {
+    Serial.println("\nWi-Fi failed, will retry later.");
+  }
+}
 
-2. **Upload the code** to the ESP8266 via Arduino IDE (or PlatformIO).
+// -----------------------------------------------------------------------------
+void setup() {
+  Serial.begin(115200);
+  wifiConnect();
+}
 
----
+// -----------------------------------------------------------------------------
+void loop() {
+  unsigned long now = millis();
 
-## ESP32 Touch Board Setup (hardware keypad)
+  // reconnect attempt every 10 s
+  static unsigned long lastWifiTry = 0;
+  if (WiFi.status() != WL_CONNECTED && now - lastWifiTry > 10000) {
+    lastWifiTry = now;
+    wifiConnect();
+  }
 
-The touch board calls the very same Albilab URLs as the web interface, but you press physical buttons instead of clicking on the page.
+  for (byte i = 0; i < NUM_TOUCH; ++i) {
+    int val = touchRead(touchPins[i]);
 
-1. **Edit `ESP32/albilab_touch_board.ino`**
+    if (now - lastDebug >= DEBUG_MS) {
+      Serial.print(i + 1); Serial.print(": "); Serial.println(val);
+    }
 
-   ```cpp
-   const char* ssid     = "YOUR_WIFI_SSID";
-   const char* password = "YOUR_WIFI_PASSWORD";
+    if (val < THRESHOLD) {                               // finger detected
+      if (!pressed[i]) {
+        if (!counting[i]) {                              // start debounce
+          counting[i]   = true;
+          pressStart[i] = now;
+        } else if (now - pressStart[i] >= MIN_TIME) {    // valid press!
+          pressed[i]  = true;
+          counting[i] = false;
+          Serial.print("Button "); Serial.print(i + 1); Serial.println(" PRESSED");
 
-   // ========= MUST be set before first flash =========
-   const char* ALBILAB_BASE_URL  = "";     // <- same URL as ESP8266 / Flask
-   const char* AUTH_HEADER_NAME  = "Authorization";                    // usually leave as is
-   const char* AUTH_HEADER_VALUE = "Basic "; // the base64 user:password header value
-   // ==================================================
-   ```
-   All other constants (touch pins, thresholds…) come with sane defaults.
+          if (WiFi.status() == WL_CONNECTED) {
+            callButtonUrl(btnId[i]);
+          } else {
+            Serial.println("No Wi-Fi, URL not called.");
+          }
+        }
+      }
+    } else {                                            // released
+      pressed[i]  = false;
+      counting[i] = false;
+    }
+  }
 
-2. **Upload the code** to any ESP32 that supports capacitive pins (the default pin list is `{4, 14, 27, 33, 32}` → `T0–T4`).
-
-3. **Print the enclosure**  
-   A 3-D printable model for the five-button keypad will be published here: **_LINK_PENDING_**.  
-   Wiring is trivial: just power the ESP32 (5 V → VIN, GND → GND). The capacitive electrodes are part of the printed front plate; no extra components are required.
-
----
-
-## Flask Application Setup
-
-1. **Edit `albilab.py`**
-
-   ```python
-   # where the micro-controller lives (IP or mDNS name)
-   remote_server = 'ADD_ESP_SERVER_HERE'
-
-   # Albilab local API endpoint
-   ALBILAB_INFO_API_URL = 'http://ADD_ALBILAB_LOCAL_ADDRESS_HERE/info'
-
-   users = {
-       "albilab": "ADD_PASSWORD_HERE"
-   }
-   ```
-
-2. **Build & run the container**
-
-   ```bash
-   docker build -t albilab-remote-control .
-   docker run -p 5000:5000 albilab-remote-control
-   ```
-
----
-
-## Usage
-
-With the Flask application running, open <http://localhost:5000> (or the host IP) and control the station either:
-
-- via the web interface (ESP8266 receives the command), **or**  
-- by touching the buttons on the ESP32 keypad (ESP32 sends the same HTTPS requests directly).
-
-Both paths hit the identical Albilab REST endpoints, so they are completely interchangeable.
-
----
-
-## Notes
-
-- Keep the ESP-devices and the machine running Flask on the same network (or expose/mDNS accordingly).  
-- Basic HTTP authentication is used; choose a strong password in `albilab.py`.  
-- Touch sensitivity (`THRESHOLD`) and debounce (`MIN_TIME`) can be tuned in the ESP32 sketch if your printed keypad behaves differently.
+  if (now - lastDebug >= DEBUG_MS) lastDebug = now;
+  delay(5);
+}
